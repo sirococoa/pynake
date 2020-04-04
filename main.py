@@ -46,7 +46,7 @@ class SnakeHead:
         App.collision[self.x][self.y] = True
 
         # リンゴを食べる
-        if App.apple[0] == self.x and App.apple[1] == self.y:
+        if App.apple and App.apple[0] == self.x and App.apple[1] == self.y:
             App.apple = None
             self.length += 1
 
