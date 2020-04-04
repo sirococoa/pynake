@@ -122,10 +122,11 @@ class App:
                 self.key_right = 0
 
             # リンゴの生成
-            if App.apple:
+            if not App.apple:
+                App.apple = [0, 0]
                 while True:
-                    App.apple[0] = randint(0, TILE_NUM)
-                    App.apple[1] = randint(0, TILE_NUM)
+                    App.apple[0] = randint(0, TILE_NUM - 1)
+                    App.apple[1] = randint(0, TILE_NUM - 1)
                     if not App.collision[App.apple[0]][App.apple[1]]:
                         break
 
