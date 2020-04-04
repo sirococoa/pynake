@@ -20,7 +20,6 @@ class SnakeHead:
         self.length = 3
         self.color = color
         self.body = None
-        self.death = False
 
     def update(self, key_input):
         if key_input != 0:
@@ -36,9 +35,6 @@ class SnakeHead:
             self.y += 1
         else:
             self.x -= 1
-
-        if (not 0 <= self.x < TILE_NUM) or (not 0 <= self.y < TILE_NUM):
-            self.death = True
 
         if self.body:
             self.body.update()
