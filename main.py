@@ -40,10 +40,15 @@ class SnakeHead:
         else:
             self.x -= 1
 
-        # 当たり判定の追加
+        # 当たり判定
         if App.collision[self.x][self.y]:
             App.game_over = True
         App.collision[self.x][self.y] = True
+
+        # リンゴを食べる
+        if App.apple[0] == self.x and App.apple[1] == self.y:
+            App.apple = None
+            self.length += 1
 
         if self.body:
             self.body.update()
