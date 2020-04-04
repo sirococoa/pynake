@@ -62,6 +62,7 @@ class SnakeBody:
 
         if self.next_body:
             if self.next_body.remain_time < 0:
+                self.next_body.delete()
                 self.next_body = None
             else:
                 self.next_body.update()
@@ -70,6 +71,9 @@ class SnakeBody:
         pyxel.rect(self.x*TILE_SIZE, self.y*TILE_SIZE, TILE_SIZE, TILE_SIZE, self.color)
         if self.next_body:
             self.next_body.draw()
+
+    def delete(self):
+        App.collision[self.x][self.y] = False
 
 
 class App:
