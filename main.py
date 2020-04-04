@@ -38,6 +38,8 @@ class SnakeHead:
             self.x -= 1
 
         # 当たり判定の追加
+        if App.collision[self.x][self.y]:
+            App.game_over = True
         App.collision[self.x][self.y] = True
 
         if self.body:
