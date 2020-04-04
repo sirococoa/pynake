@@ -84,6 +84,7 @@ class SnakeBody:
 class App:
     collision = [[False]*TILE_NUM for _ in range(TILE_NUM)]
     game_over = False
+    apple = [TILE_NUM//2, TILE_NUM//2]
 
     def __init__(self):
         pyxel.init(WINDOW_SIZE, WINDOW_SIZE)
