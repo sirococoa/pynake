@@ -69,6 +69,8 @@ class SnakeBody:
 
 
 class App:
+    collision = [[False]*TILE_NUM for _ in range(TILE_NUM)]
+
     def __init__(self):
         pyxel.init(WINDOW_SIZE, WINDOW_SIZE)
         self.snake = SnakeHead(3, 0, 2, 5)
