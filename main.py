@@ -1,8 +1,11 @@
 import pyxel
+from random import randint
 
-TILE_SIZE = 8
-TILE_NUM = 20
+TILE_SIZE = 4
+TILE_NUM = 10
 WINDOW_SIZE = TILE_SIZE*TILE_NUM
+
+TEXT_OFFSET = -16
 
 FLAME = 20
 
@@ -92,7 +95,9 @@ class App:
 
 
     def update(self):
-        if not App.game_over:
+        if App.game_over:
+            pass
+        else:
             if pyxel.btn(pyxel.KEY_LEFT):
                 self.key_left = 1
             if pyxel.btn(pyxel.KEY_RIGHT):
@@ -107,8 +112,14 @@ class App:
                 self.key_right = 0
 
 
+
     def draw(self):
         pyxel.cls(0)
-        self.snake.draw()
+        if App.game_over:
+            pyxel.text(WINDOW_SIZE // 2 + TEXT_OFFSET  + randint(-1, 1), WINDOW_SIZE // 2 + randint(-1, 1), "GAMEOVER", 10)
+            pyxel.text(WINDOW_SIZE // 2 + TEXT_OFFSET, WINDOW_SIZE // 2, "GAMEOVER", 7)
+        else:
+            self.snake.draw()
+
 
 App()
