@@ -20,6 +20,7 @@ class SnakeHead:
         self.length = 3
         self.color = color
         self.body = None
+        App.collision[self.x][self.y] = True
 
     def update(self, key_input):
         if key_input != 0:
@@ -35,6 +36,9 @@ class SnakeHead:
             self.y += 1
         else:
             self.x -= 1
+
+        # 当たり判定の追加
+        App.collision[self.x][self.y] = True
 
         if self.body:
             self.body.update()
