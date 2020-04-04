@@ -78,6 +78,7 @@ class SnakeBody:
 
 class App:
     collision = [[False]*TILE_NUM for _ in range(TILE_NUM)]
+    game_over = False
 
     def __init__(self):
         pyxel.init(WINDOW_SIZE, WINDOW_SIZE)
@@ -89,18 +90,19 @@ class App:
 
 
     def update(self):
-        if pyxel.btn(pyxel.KEY_LEFT):
-            self.key_left = 1
-        if pyxel.btn(pyxel.KEY_RIGHT):
-            self.key_right = 1
+        if not App.game_over:
+            if pyxel.btn(pyxel.KEY_LEFT):
+                self.key_left = 1
+            if pyxel.btn(pyxel.KEY_RIGHT):
+                self.key_right = 1
 
-        if self.step < FLAME:
-            self.step += 1
-        else:
-            self.snake.update(self.key_right - self.key_left)
-            self.step = 0
-            self.key_left = 0
-            self.key_right = 0
+            if self.step < FLAME:
+                self.step += 1
+            else:
+                self.snake.update(self.key_right - self.key_left)
+                self.step = 0
+                self.key_left = 0
+                self.key_right = 0
 
 
     def draw(self):
