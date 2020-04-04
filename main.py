@@ -40,6 +40,10 @@ class SnakeHead:
         else:
             self.x -= 1
 
+        # 回り込み
+        self.x = self.x % TILE_NUM
+        self.y = self.y % TILE_NUM
+
         # 当たり判定
         if App.collision[self.x][self.y]:
             App.game_over = True
