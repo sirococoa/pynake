@@ -5,6 +5,8 @@ TILE_SIZE = 4
 TILE_NUM = 10
 WINDOW_SIZE = TILE_SIZE*TILE_NUM
 
+SNAKE_MIN_SIZE = 2
+
 TEXT_OFFSET = -16
 
 FLAME = 20
@@ -67,6 +69,7 @@ class SnakeBody:
     def __init__(self, x, y, length, next_body, color):
         self.x = x
         self.y = y
+        self.length = length
         self.remain_time = length
         self.next_body = next_body
         self.color = color
@@ -82,7 +85,9 @@ class SnakeBody:
                 self.next_body.update()
 
     def draw(self):
-        pyxel.rect(self.x*TILE_SIZE, self.y*TILE_SIZE, TILE_SIZE, TILE_SIZE, self.color)
+        size = self.remain_time / self.length * (TILE_SIZE - SNAKE_MIN_SIZE) + SNAKE_MIN_SIZE
+        offset = (TILE_SIZE - size) // 2
+        pyxel.rect(self.x*TILE_SIZE + offset, self.y*TILE_SIZE + offset, size, size, self.color)
         if self.next_body:
             self.next_body.draw()
 
