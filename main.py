@@ -1,7 +1,7 @@
 import pyxel
 from random import randint
 
-TILE_SIZE = 4
+TILE_SIZE = 8
 TILE_NUM = 10
 WINDOW_SIZE = TILE_SIZE*TILE_NUM
 
@@ -28,10 +28,12 @@ class SnakeHead:
         App.collision[self.x][self.y] = True
 
     def update(self, key_input):
+        connection = (self.direction + 2) % 4
+
         if (key_input - self.direction) % 4 != 2:
             self.direction = key_input
 
-        self.body = SnakeBody(self.x, self.y, self.length, self.body, self.color)
+        self.body = SnakeBody(self.x, self.y, self.length, self.body, self.color, (self.direction, connection))
 
         if self.direction == 0:
             self.y -= 1
@@ -66,13 +68,14 @@ class SnakeHead:
 
 
 class SnakeBody:
-    def __init__(self, x, y, length, next_body, color):
+    def __init__(self, x, y, length, next_body, color, connection):
         self.x = x
         self.y = y
         self.length = length
         self.remain_time = length
         self.next_body = next_body
         self.color = color
+        self.connection = connection
 
     def update(self):
         self.remain_time -= 1
@@ -86,8 +89,17 @@ class SnakeBody:
 
     def draw(self):
         size = self.remain_time / self.length * (TILE_SIZE - SNAKE_MIN_SIZE) + SNAKE_MIN_SIZE
+        size = size // 2 * 2 # 2の倍数に調整
         offset = (TILE_SIZE - size) // 2
-        pyxel.rect(self.x*TILE_SIZE + offset, self.y*TILE_SIZE + offset, size, size, self.color)
+        pyxel.rect(self.x * TILE_SIZE + offset, self.y * TILE_SIZE + offset, size, size, self.color)
+        if 0 in self.connection:
+            pyxel.rect(self.x * TILE_SIZE + offset, self.y * TILE_SIZE, size, offset, self.color)
+        if 1 in self.connection:
+            pyxel.rect(self.x * TILE_SIZE + offset + size, self.y * TILE_SIZE + offset, offset, size, self.color)
+        if 2 in self.connection:
+            pyxel.rect(self.x * TILE_SIZE + offset, self.y * TILE_SIZE + offset + size, size, offset, self.color)
+        if 3 in self.connection:
+            pyxel.rect(self.x * TILE_SIZE, self.y * TILE_SIZE + offset, offset, size, self.color)
         if self.next_body:
             self.next_body.draw()
 
