@@ -26,8 +26,8 @@ class SnakeHead:
         App.collision[self.x][self.y] = True
 
     def update(self, key_input):
-        if key_input != 0:
-            self.direction = (self.direction + key_input) % 4
+        if (key_input - self.direction) % 4 != 2:
+            self.direction = key_input
 
         self.body = SnakeBody(self.x, self.y, self.length, self.body, self.color)
 
@@ -99,8 +99,7 @@ class App:
         pyxel.init(WINDOW_SIZE, WINDOW_SIZE)
         self.snake = SnakeHead(3, 0, 2, 5)
         self.step = 0
-        self.key_left = 0
-        self.key_right = 0
+        self.key = 0
         pyxel.run(self.update, self.draw)
 
 
@@ -108,18 +107,20 @@ class App:
         if App.game_over:
             pass
         else:
-            if pyxel.btn(pyxel.KEY_LEFT):
-                self.key_left = 1
+            if pyxel.btn(pyxel.KEY_UP):
+                self.key = 0
             if pyxel.btn(pyxel.KEY_RIGHT):
-                self.key_right = 1
+                self.key = 1
+            if pyxel.btn(pyxel.KEY_DOWN):
+                self.key = 2
+            if pyxel.btn(pyxel.KEY_LEFT):
+                self.key = 3
 
             if self.step < FLAME:
                 self.step += 1
             else:
-                self.snake.update(self.key_right - self.key_left)
+                self.snake.update(self.key)
                 self.step = 0
-                self.key_left = 0
-                self.key_right = 0
 
             # リンゴの生成
             if not App.apple:
