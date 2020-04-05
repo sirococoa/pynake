@@ -114,7 +114,8 @@ class App:
 
     def __init__(self):
         pyxel.init(WINDOW_SIZE, WINDOW_SIZE)
-        self.snake = SnakeHead(3, 0, 2, 5)
+        self.snake1 = SnakeHead(3, 0, 2, 5)
+        self.snake2 = SnakeHead(TILE_NUM - 3, TILE_NUM, 0, 10)
         self.step = 0
         self.key = 0
         pyxel.run(self.update, self.draw)
@@ -136,7 +137,8 @@ class App:
             if self.step < FLAME:
                 self.step += 1
             else:
-                self.snake.update(self.key)
+                self.snake1.update(self.key)
+                self.snake2.update((self.key + 2) % 4)
                 self.step = 0
 
             # リンゴの生成
@@ -156,7 +158,8 @@ class App:
             pyxel.text(WINDOW_SIZE // 2 + TEXT_OFFSET  + randint(-1, 1), WINDOW_SIZE // 2 + randint(-1, 1), "GAMEOVER", 10)
             pyxel.text(WINDOW_SIZE // 2 + TEXT_OFFSET, WINDOW_SIZE // 2, "GAMEOVER", 7)
         else:
-            self.snake.draw()
+            self.snake2.darw()
+            self.snake1.draw()
             if App.apple:
                 pyxel.rect(App.apple[0] * TILE_SIZE, App.apple[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE, 8)
 
