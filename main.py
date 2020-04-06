@@ -11,11 +11,11 @@ TEXT_OFFSET = -16
 
 FLAME = 20
 
-def text_mc(x, y, text, colors):
-    TEXT_W = 3
-    for i, s in enumerate(text):
-        pyxel.text(x, y, s, colors[i])
-        x += len(text) * TEXT_W
+def text_mc(x, y, text_list, color_list):
+    TEXT_W = 4
+    for i, s in enumerate(text_list):
+        pyxel.text(x, y, s, color_list[i])
+        x += len(s) * TEXT_W
 
 class SnakeHead:
     def __init__(self, x, y, direction, color):
