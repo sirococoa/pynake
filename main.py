@@ -174,7 +174,7 @@ class App:
             message_color = [7, 5, 7, 10, 7, 7]
             text_mc(center("".join(message), WINDOW_SIZE), WINDOW_SIZE // 4 * 3, message, message_color)
         else:
-            pyxel.text(center(str(self.flame), WINDOW_SIZE), WINDOW_SIZE//2, str(self.flame), 7)
+            # pyxel.text(center(str(self.flame), WINDOW_SIZE), WINDOW_SIZE//2, str(self.flame), 7)
             self.snake1.draw()
             self.snake2.draw()
             if App.apple:
