@@ -123,7 +123,7 @@ class App:
     def __init__(self):
         pyxel.init(WINDOW_SIZE, WINDOW_SIZE)
         self.snake1 = SnakeHead(3, 0, 2, 5)
-        self.snake2 = SnakeHead(TILE_NUM - 3, TILE_NUM - 1, 0, 10)
+        self.snake2 = SnakeHead(TILE_NUM - 4, TILE_NUM - 1, 0, 10)
         self.step = 0
         self.key = 0
         pyxel.run(self.update, self.draw)
