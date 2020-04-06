@@ -1,5 +1,6 @@
 import pyxel
 from random import randint
+from itertools import chain
 
 TILE_SIZE = 8
 TILE_NUM = 10
@@ -123,6 +124,7 @@ class SnakeBody:
 class App:
     collision = [[False]*TILE_NUM for _ in range(TILE_NUM)]
     game_over = False
+    clear = False
     apple = [TILE_NUM//2, TILE_NUM//2]
 
     def __init__(self):
@@ -133,7 +135,7 @@ class App:
 
 
     def update(self):
-        if App.game_over:
+        if App.game_over or App.clear:
             if pyxel.btn(pyxel.KEY_R):
                 self.start()
         else:
@@ -160,18 +162,28 @@ class App:
 
             # リンゴの生成
             if not App.apple:
-                App.apple = [0, 0]
-                while True:
-                    App.apple[0] = randint(0, TILE_NUM - 1)
-                    App.apple[1] = randint(0, TILE_NUM - 1)
-                    if not App.collision[App.apple[0]][App.apple[1]]:
-                        break
+                if all(chain.from_iterable(App.collision)):
+                    App.clear = True
+                else:
+                    App.apple = [0, 0]
+                    while True:
+                        App.apple[0] = randint(0, TILE_NUM - 1)
+                        App.apple[1] = randint(0, TILE_NUM - 1)
+                        if not App.collision[App.apple[0]][App.apple[1]]:
+                            break
 
 
 
     def draw(self):
         pyxel.cls(0)
-        if App.game_over:
+        if App.clear:
+            pyxel.text(center("GAMECLEAR!!!", WINDOW_SIZE), WINDOW_SIZE // 4, "GAMECLEAR!!!", 10)
+            message = ["SCORE:", str(self.snake1.length), "x", str(self.snake2.length), ">>",
+                       str(self.snake1.length * self.snake2.length)]
+            message_color = [7, 5, 7, 10, 7, 7]
+            text_mc(center("".join(message), WINDOW_SIZE), WINDOW_SIZE // 2, message, message_color)
+            pyxel.text(center("<R> to restart", WINDOW_SIZE), WINDOW_SIZE // 4 * 3, "<R> to restart", 7)
+        elif App.game_over:
             pyxel.text(center("GAMEOVER", WINDOW_SIZE)  + randint(-1, 1), WINDOW_SIZE // 4 + randint(-1, 1), "GAMEOVER", 10)
             pyxel.text(center("GAMEOVER", WINDOW_SIZE), WINDOW_SIZE // 4, "GAMEOVER", 7)
             message = ["SCORE:", str(self.snake1.length), "x", str(self.snake2.length), ">>", str(self.snake1.length*self.snake2.length)]
@@ -189,6 +201,7 @@ class App:
     def start(self):
         App.collision = [[False] * TILE_NUM for _ in range(TILE_NUM)]
         App.game_over = False
+        App.clear = False
         App.apple = [TILE_NUM // 2, TILE_NUM // 2]
         self.snake1 = SnakeHead(3, 0, 2, 5)
         self.snake2 = SnakeHead(TILE_NUM - 4, TILE_NUM - 1, 0, 10)
