@@ -125,17 +125,14 @@ class App:
 
     def __init__(self):
         pyxel.init(WINDOW_SIZE, WINDOW_SIZE)
-        self.snake1 = SnakeHead(3, 0, 2, 5)
-        self.snake2 = SnakeHead(TILE_NUM - 4, TILE_NUM - 1, 0, 10)
-        self.step = 0
-        self.key = 0
-        self.flame = 20
+        self.start()
         pyxel.run(self.update, self.draw)
 
 
     def update(self):
         if App.game_over:
-            pass
+            if pyxel.btn(pyxel.KEY_R):
+                self.start()
         else:
             if pyxel.btn(pyxel.KEY_UP):
                 self.key = 0
@@ -180,5 +177,15 @@ class App:
             if App.apple:
                 pyxel.rect(App.apple[0] * TILE_SIZE, App.apple[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE, 8)
 
+
+    def start(self):
+        App.collision = [[False] * TILE_NUM for _ in range(TILE_NUM)]
+        App.game_over = False
+        App.apple = [TILE_NUM // 2, TILE_NUM // 2]
+        self.snake1 = SnakeHead(3, 0, 2, 5)
+        self.snake2 = SnakeHead(TILE_NUM - 4, TILE_NUM - 1, 0, 10)
+        self.step = 0
+        self.key = 0
+        self.flame = 20
 
 App()
