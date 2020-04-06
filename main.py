@@ -7,7 +7,10 @@ WINDOW_SIZE = TILE_SIZE*TILE_NUM
 
 SNAKE_MIN_SIZE = 2
 
-FLAME = 20
+MAX_FLAME = 20
+MIN_FLAME = 5
+
+MAX_SPEED_LENGTH = 25
 
 def text_mc(x, y, text_list, color_list):
     TEXT_W = 4
@@ -126,6 +129,7 @@ class App:
         self.snake2 = SnakeHead(TILE_NUM - 4, TILE_NUM - 1, 0, 10)
         self.step = 0
         self.key = 0
+        self.flame = 20
         pyxel.run(self.update, self.draw)
 
 
@@ -142,12 +146,13 @@ class App:
             if pyxel.btn(pyxel.KEY_LEFT):
                 self.key = 3
 
-            if self.step < FLAME:
+            if self.step < self.flame:
                 self.step += 1
             else:
                 self.snake1.update(self.key)
                 self.snake2.update((self.key + 2) % 4)
                 self.step = 0
+                self.flame = (MAX_FLAME - MIN_FLAME) * (MAX_SPEED_LENGTH - min(self.snake1.length + self.snake2.length, MAX_SPEED_LENGTH)) / MAX_SPEED_LENGTH + MIN_FLAME
 
             # リンゴの生成
             if not App.apple:
@@ -169,6 +174,7 @@ class App:
             message_color = [7, 5, 7, 10, 7, 7]
             text_mc(center("".join(message), WINDOW_SIZE), WINDOW_SIZE // 4 * 3, message, message_color)
         else:
+            pyxel.text(center(str(self.flame), WINDOW_SIZE), WINDOW_SIZE//2, str(self.flame), 7)
             self.snake1.draw()
             self.snake2.draw()
             if App.apple:
