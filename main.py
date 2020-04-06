@@ -182,13 +182,14 @@ class App:
                        str(self.snake1.length * self.snake2.length)]
             message_color = [7, 5, 7, 10, 7, 7]
             text_mc(center("".join(message), WINDOW_SIZE), WINDOW_SIZE // 2, message, message_color)
-            pyxel.text(center("<R> to restart", WINDOW_SIZE), WINDOW_SIZE // 4 * 3, "<R> to restart", 7)
+            pyxel.text(center("<R> to restart", WINDOW_SIZE), WINDOW_SIZE // 4 * 3, "<R> to restart", 10)
         elif App.game_over:
-            pyxel.text(center("GAMEOVER", WINDOW_SIZE)  + randint(-1, 1), WINDOW_SIZE // 4 + randint(-1, 1), "GAMEOVER", 10)
+            pyxel.text(center("GAMEOVER", WINDOW_SIZE) + randint(-1, 1), WINDOW_SIZE // 4 + randint(-1, 1), "GAMEOVER", 10)
             pyxel.text(center("GAMEOVER", WINDOW_SIZE), WINDOW_SIZE // 4, "GAMEOVER", 7)
             message = ["SCORE:", str(self.snake1.length), "x", str(self.snake2.length), ">>", str(self.snake1.length*self.snake2.length)]
             message_color = [7, 5, 7, 10, 7, 7]
             text_mc(center("".join(message), WINDOW_SIZE), WINDOW_SIZE // 2, message, message_color)
+            pyxel.text(center("<R> to restart", WINDOW_SIZE)  + randint(-1, 1), WINDOW_SIZE // 4 * 3 + randint(-1, 1), "<R> to restart", 10)
             pyxel.text(center("<R> to restart", WINDOW_SIZE), WINDOW_SIZE // 4 * 3, "<R> to restart", 7)
         else:
             # pyxel.text(center(str(self.flame), WINDOW_SIZE), WINDOW_SIZE//2, str(self.flame), 7)
