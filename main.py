@@ -7,8 +7,6 @@ WINDOW_SIZE = TILE_SIZE*TILE_NUM
 
 SNAKE_MIN_SIZE = 2
 
-TEXT_OFFSET = -16
-
 FLAME = 20
 
 def text_mc(x, y, text_list, color_list):
@@ -165,8 +163,8 @@ class App:
     def draw(self):
         pyxel.cls(0)
         if App.game_over:
-            pyxel.text(WINDOW_SIZE // 2 + TEXT_OFFSET  + randint(-1, 1), WINDOW_SIZE // 2 + randint(-1, 1), "GAMEOVER", 10)
-            pyxel.text(WINDOW_SIZE // 2 + TEXT_OFFSET, WINDOW_SIZE // 2, "GAMEOVER", 7)
+            pyxel.text(center("GAMEOVER", WINDOW_SIZE)  + randint(-1, 1), WINDOW_SIZE // 2 + randint(-1, 1), "GAMEOVER", 10)
+            pyxel.text(center("GAMEOVER", WINDOW_SIZE), WINDOW_SIZE // 2, "GAMEOVER", 7)
         else:
             self.snake1.draw()
             self.snake2.draw()
