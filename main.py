@@ -11,6 +11,12 @@ TEXT_OFFSET = -16
 
 FLAME = 20
 
+def text_mc(x, y, text, colors):
+    TEXT_W = 3
+    for i, s in enumerate(text):
+        pyxel.text(x, y, s, colors[i])
+        x += len(text) * TEXT_W
+
 class SnakeHead:
     def __init__(self, x, y, direction, color):
         """
@@ -115,7 +121,7 @@ class App:
     def __init__(self):
         pyxel.init(WINDOW_SIZE, WINDOW_SIZE)
         self.snake1 = SnakeHead(3, 0, 2, 5)
-        self.snake2 = SnakeHead(TILE_NUM - 3, TILE_NUM, 0, 10)
+        self.snake2 = SnakeHead(TILE_NUM - 3, TILE_NUM - 1, 0, 10)
         self.step = 0
         self.key = 0
         pyxel.run(self.update, self.draw)
@@ -158,8 +164,8 @@ class App:
             pyxel.text(WINDOW_SIZE // 2 + TEXT_OFFSET  + randint(-1, 1), WINDOW_SIZE // 2 + randint(-1, 1), "GAMEOVER", 10)
             pyxel.text(WINDOW_SIZE // 2 + TEXT_OFFSET, WINDOW_SIZE // 2, "GAMEOVER", 7)
         else:
-            self.snake2.darw()
             self.snake1.draw()
+            self.snake2.draw()
             if App.apple:
                 pyxel.rect(App.apple[0] * TILE_SIZE, App.apple[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE, 8)
 
