@@ -170,7 +170,7 @@ class App:
             message = ["SCORE:", str(self.snake1.length), "x", str(self.snake2.length), ">>", str(self.snake1.length*self.snake2.length)]
             message_color = [7, 5, 7, 10, 7, 7]
             text_mc(center("".join(message), WINDOW_SIZE), WINDOW_SIZE // 2, message, message_color)
-            pyxel.text(center("<R> to restart", WINDOW_SIZE), WINDOW_SIZE // 4, "<R> to restart", 10)
+            pyxel.text(center("<R> to restart", WINDOW_SIZE), WINDOW_SIZE // 4 * 3, "<R> to restart", 7)
         else:
             # pyxel.text(center(str(self.flame), WINDOW_SIZE), WINDOW_SIZE//2, str(self.flame), 7)
             self.snake1.draw()
