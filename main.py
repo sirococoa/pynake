@@ -17,6 +17,10 @@ def text_mc(x, y, text_list, color_list):
         pyxel.text(x, y, s, color_list[i])
         x += len(s) * TEXT_W
 
+def center(text, width):
+    TEXT_W = 4
+    return width // 2 - len(text) * TEXT_W // 2
+
 class SnakeHead:
     def __init__(self, x, y, direction, color):
         """
