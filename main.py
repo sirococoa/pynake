@@ -62,12 +62,14 @@ class SnakeHead:
         # 当たり判定
         if App.collision[self.x][self.y]:
             App.game_over = True
+            pyxel.playm(0)
         App.collision[self.x][self.y] = True
 
         # リンゴを食べる
         if App.apple and App.apple[0] == self.x and App.apple[1] == self.y:
             App.apple = None
             self.length += 1
+            pyxel.play(3, 0)
 
         if self.body:
             self.body.update()
@@ -125,6 +127,7 @@ class App:
 
     def __init__(self):
         pyxel.init(WINDOW_SIZE, WINDOW_SIZE)
+        pyxel.load("assets\pynake.pyxres")
         self.start()
         pyxel.run(self.update, self.draw)
 
@@ -136,12 +139,16 @@ class App:
         else:
             if pyxel.btn(pyxel.KEY_UP):
                 self.key = 0
+                pyxel.play(0, self.key + 1)
             if pyxel.btn(pyxel.KEY_RIGHT):
                 self.key = 1
+                pyxel.play(0, self.key + 1)
             if pyxel.btn(pyxel.KEY_DOWN):
                 self.key = 2
+                pyxel.play(0, self.key + 1)
             if pyxel.btn(pyxel.KEY_LEFT):
                 self.key = 3
+                pyxel.play(0, self.key + 1)
 
             if self.step < self.flame:
                 self.step += 1
