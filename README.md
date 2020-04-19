@@ -13,7 +13,7 @@ python3 main.py
 
 ### Controls
 
-- Press space to start  
+- Click Pyxel new window to start  
 - Use arrow keys to move  
 Use the arrow keys to control the direction of the blue snake.
 (Eg, press ↑ to turn the snake up.)
