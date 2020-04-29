@@ -39,6 +39,10 @@ class SnakeHead:
         self.body = None
         App.collision[self.x][self.y] = True
 
+    def body_update(self):
+        if self.body:
+            self.body.update()
+
     def update(self, key_input):
         connection = (self.direction + 2) % 4
 
@@ -72,8 +76,6 @@ class SnakeHead:
             self.length += 1
             pyxel.play(3, 0)
 
-        if self.body:
-            self.body.update()
 
     def draw(self):
         pyxel.rect(self.x*TILE_SIZE, self.y*TILE_SIZE, TILE_SIZE, TILE_SIZE, self.color)
@@ -133,7 +135,6 @@ class App:
         self.start()
         pyxel.run(self.update, self.draw)
 
-
     def update(self):
         if App.game_over or App.clear:
             if pyxel.btn(pyxel.KEY_R):
@@ -155,6 +156,8 @@ class App:
             if self.step < self.flame:
                 self.step += 1
             else:
+                self.snake1.body_update()
+                self.snake2.body_update()
                 self.snake1.update(self.key)
                 self.snake2.update((self.key + 2) % 4)
                 self.step = 0
