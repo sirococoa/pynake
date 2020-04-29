@@ -97,7 +97,7 @@ class SnakeBody:
         self.remain_time -= 1
 
         if self.next_body:
-            if self.next_body.remain_time < 0:
+            if self.next_body.remain_time == 0:
                 self.next_body.delete()
                 self.next_body = None
             else:
