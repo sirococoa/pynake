@@ -163,7 +163,7 @@ class App:
 
     def __init__(self):
         pyxel.init(WINDOW_SIZE, WINDOW_SIZE)
-        pyxel.load("assets\pynake.pyxres")
+        pyxel.load("assets/pynake.pyxres")
         self.start()
         pyxel.run(self.update, self.draw)
 
