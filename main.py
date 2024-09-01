@@ -2,7 +2,7 @@ import pyxel
 from random import randint
 from itertools import chain
 
-TILE_SIZE = 8
+TILE_SIZE = 16
 TILE_NUM = 10
 WINDOW_SIZE = TILE_SIZE*TILE_NUM
 
@@ -154,6 +154,55 @@ class SnakeBody:
     def delete(self):
         App.collision[self.x][self.y] = False
 
+
+class Button:
+    REDIS = 10
+    COLOR = 7
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def clicked(self):
+        if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT):
+            if (self.x - pyxel.mouse_x)**2 + (self.y - pyxel.mouse_y)**2 < self.REDIS**2:
+                return True
+        return False
+
+    def draw(self):
+        pyxel.circb(self.x, self.y, self.REDIS, self.COLOR)
+
+
+class GamePad:
+    BUTTON_DISTANCE = 18
+    BUTTON_BASE_POSITIONS = ((WINDOW_SIZE//4, WINDOW_SIZE//4*3),
+                             (WINDOW_SIZE//4*3, WINDOW_SIZE//4*3))
+    BUTTON_POSITIONS = ((0, -BUTTON_DISTANCE),  # up
+                        (BUTTON_DISTANCE, 0),   # right
+                        (0, BUTTON_DISTANCE),   # down
+                        (-BUTTON_DISTANCE, 0))  # left
+    RESET_BUTTON_POSITIONS = (WINDOW_SIZE//2, WINDOW_SIZE//4*3)
+
+    def __init__(self):
+        self.buttons: list[Button]  = []
+        for sx, sy in self.BUTTON_BASE_POSITIONS:
+            for x, y in self.BUTTON_POSITIONS:
+                self.buttons.append(Button(sx + x, sy + y))
+        self.reset_button = Button(*self.RESET_BUTTON_POSITIONS)
+
+    def update(self):
+        for i, button in enumerate(self.buttons):
+            if button.clicked():
+                return i%4
+        if self.reset_button.clicked():
+            return 4
+
+    def draw(self, draw_reset_button):
+        if draw_reset_button:
+            self.reset_button.draw()
+        else:
+            for button in self.buttons:
+                button.draw()
 
 class App:
     collision = [[False]*TILE_NUM for _ in range(TILE_NUM)]
