@@ -1,4 +1,5 @@
 import pyxel
+from enum import IntEnum
 from random import randint
 from itertools import chain
 
@@ -39,6 +40,13 @@ def center(text, width):
     TEXT_W = 4
     return width // 2 - len(text) * TEXT_W // 2
 
+class Direction(IntEnum):
+    NONE = -1
+    UP = 0
+    RIGHT = 1
+    DOWN = 2
+    LEFT = 3
+
 class SnakeHead:
     def __init__(self, x, y, direction, color):
         """
@@ -78,11 +86,11 @@ class SnakeHead:
 
         self.body = SnakeBody(self.x, self.y, self.length, self.body, self.color, (self.direction, connection))
 
-        if self.direction == 0:
+        if self.direction == Direction.UP:
             self.y -= 1
-        elif self.direction == 1:
+        elif self.direction == Direction.RIGHT:
             self.x += 1
-        elif self.direction == 2:
+        elif self.direction == Direction.DOWN:
             self.y += 1
         else:
             self.x -= 1
@@ -140,13 +148,13 @@ class SnakeBody:
         size = size // 2 * 2 # 2の倍数に調整
         offset = (TILE_SIZE - size) // 2
         pyxel.rect(self.x * TILE_SIZE + offset, self.y * TILE_SIZE + offset, size, size, self.color)
-        if 0 in self.connection:
+        if Direction.UP in self.connection:
             pyxel.rect(self.x * TILE_SIZE + offset, self.y * TILE_SIZE, size, offset, self.color)
-        if 1 in self.connection:
+        if Direction.RIGHT in self.connection:
             pyxel.rect(self.x * TILE_SIZE + offset + size, self.y * TILE_SIZE + offset, offset, size, self.color)
-        if 2 in self.connection:
+        if Direction.DOWN in self.connection:
             pyxel.rect(self.x * TILE_SIZE + offset, self.y * TILE_SIZE + offset + size, size, offset, self.color)
-        if 3 in self.connection:
+        if Direction.LEFT in self.connection:
             pyxel.rect(self.x * TILE_SIZE, self.y * TILE_SIZE + offset, offset, size, self.color)
         if self.next_body:
             self.next_body.draw()
@@ -204,6 +212,39 @@ class GamePad:
             for button in self.buttons:
                 button.draw()
 
+
+class InputController:
+    KEYS = (pyxel.KEY_W, pyxel.KEY_A, pyxel.KEY_S, pyxel.KEY_D, pyxel.KEY_R, pyxel.KEY_UP, pyxel.KEY_RIGHT, pyxel.KEY_DOWN, pyxel.KEY_LEFT)
+
+    def __init__(self):
+        self.game_pad = GamePad()
+        self.game_pad_active = False
+
+    def update(self):
+        if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT):
+            self.game_pad_active = True
+        if any(pyxel.btn(key) for key in self.KEYS):
+            self.game_pad_active = False
+        if self.game_pad_active:
+            return self.game_pad.update()
+        else:
+            if pyxel.btn(pyxel.KEY_UP):
+                return Direction.UP
+            if pyxel.btn(pyxel.KEY_RIGHT):
+                return Direction.RIGHT
+            if pyxel.btn(pyxel.KEY_DOWN):
+                return Direction.DOWN
+            if pyxel.btn(pyxel.KEY_LEFT):
+                return Direction.LEFT
+            if pyxel.btn(pyxel.KEY_R):
+                return 4
+        return Direction.NONE
+
+    def draw(self, draw_reset_button):
+        if self.game_pad_active:
+            self.game_pad.draw(draw_reset_button)
+
+
 class App:
     collision = [[False]*TILE_NUM for _ in range(TILE_NUM)]
     game_over = False
@@ -213,25 +254,29 @@ class App:
     def __init__(self):
         pyxel.init(WINDOW_SIZE, WINDOW_SIZE)
         pyxel.load("assets/pynake.pyxres")
+        pyxel.mouse(True)
+        self.input_controller = InputController()
         self.start()
         pyxel.run(self.update, self.draw)
 
     def update(self):
+        player_input = self.input_controller.update()
+
         if App.game_over or App.clear:
-            if pyxel.btn(pyxel.KEY_R):
+            if player_input == 4:
                 self.start()
         else:
-            if pyxel.btn(pyxel.KEY_UP):
-                self.key = 0
+            if player_input == Direction.UP:
+                self.key = Direction.UP
                 pyxel.play(0, self.key + 1)
-            if pyxel.btn(pyxel.KEY_RIGHT):
-                self.key = 1
+            if player_input == Direction.RIGHT:
+                self.key = Direction.RIGHT
                 pyxel.play(0, self.key + 1)
-            if pyxel.btn(pyxel.KEY_DOWN):
-                self.key = 2
+            if player_input == Direction.DOWN:
+                self.key = Direction.DOWN
                 pyxel.play(0, self.key + 1)
-            if pyxel.btn(pyxel.KEY_LEFT):
-                self.key = 3
+            if player_input == Direction.LEFT:
+                self.key = Direction.LEFT
                 pyxel.play(0, self.key + 1)
 
             if self.step < self.flame:
@@ -256,8 +301,6 @@ class App:
                         if not App.collision[App.apple[0]][App.apple[1]]:
                             break
 
-
-
     def draw(self):
         pyxel.cls(0)
         if App.clear:
@@ -281,7 +324,7 @@ class App:
             self.snake2.draw()
             if App.apple:
                 pyxel.rect(App.apple[0] * TILE_SIZE, App.apple[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE, 8)
-
+        self.input_controller.draw(App.game_over or App.clear)
 
     def start(self):
         App.collision = [[False] * TILE_NUM for _ in range(TILE_NUM)]
